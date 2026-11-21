@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: llmhub-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: llmhub_root_2026
+      MYSQL_DATABASE: llmhub
+      MYSQL_USER: llmhub
+      MYSQL_PASSWORD: llmhub_2026
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pllmhub_root_2026"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: llmhub-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: llmhub-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: Asia/Shanghai              # 容器默认 UTC，日志/时间工具统一北京时间
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app                # 热重载：改代码不用重建镜像
+      - ./frontend/dist:/app/dist:ro  # 前端构建产物：后端直接托管（演示单端口）
+      - faiss_data:/app/faiss_data    # 向量索引持久化
+      - kb_uploads:/app/uploads       # 知识库文档存储
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  mysql_data:
+  redis_data:
+  faiss_data:
+  kb_uploads:

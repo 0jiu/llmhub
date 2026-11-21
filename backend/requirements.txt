@@ -1,0 +1,19 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+pymysql==1.1.1
+cryptography==44.0.0
+pydantic-settings==2.7.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+redis==5.2.1
+httpx==0.28.1
+python-multipart==0.0.20
+# RAG 第 4 周：torch 用 CPU 版（单独装，镜像源快且体积小）
+torch==2.5.1+cpu
+sentence-transformers==3.3.1
+faiss-cpu==1.10.0
+pypdf==5.1.0
+# Agent 第 5 周：LangGraph 状态图编排
+langgraph==0.2.60

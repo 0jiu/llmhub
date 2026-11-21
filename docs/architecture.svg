@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 780" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1080" height="780" fill="#f6f9ff"/>
+
+  <!-- 标题 -->
+  <text x="540" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#1f2430">LLMHub 系统架构</text>
+  <text x="540" y="56" text-anchor="middle" font-size="12" fill="#8a94a8">多厂商 LLM 聚合网关 · RAG 知识库 · ReAct Agent · SSE 流式</text>
+
+  <!-- 客户端 -->
+  <rect x="360" y="72" width="360" height="64" rx="12" fill="#4d6bfe"/>
+  <text x="540" y="98" text-anchor="middle" font-size="14" font-weight="600" fill="#fff">浏览器（Vue3 + Element Plus）</text>
+  <text x="540" y="120" text-anchor="middle" font-size="11.5" fill="#dbe4ff">fetch ReadableStream 解析 SSE · 打字机流式渲染</text>
+
+  <!-- 箭头：客户端 → FastAPI -->
+  <line x1="540" y1="136" x2="540" y2="168" stroke="#4d6bfe" stroke-width="2" marker-end="url(#arrB)"/>
+  <text x="556" y="158" font-size="11.5" fill="#5a6580">HTTPS :8000 · 单端口（后端托管 SPA + API 同源）</text>
+
+  <!-- FastAPI 大容器 -->
+  <rect x="50" y="172" width="980" height="330" rx="14" fill="#ffffff" stroke="#c9d4ee" stroke-width="1.5"/>
+  <rect x="50" y="172" width="980" height="30" rx="14" fill="#eef3ff"/>
+  <text x="540" y="192" text-anchor="middle" font-size="13" font-weight="700" fill="#2b4be0">FastAPI 应用层</text>
+
+  <!-- Row A -->
+  <rect x="70" y="218" width="300" height="58" rx="10" fill="#f4f7ff" stroke="#d7def0"/>
+  <text x="220" y="242" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f2430">认证层</text>
+  <text x="220" y="262" text-anchor="middle" font-size="11" fill="#5a6580">JWT 登录态 · API Key 签发与校验</text>
+
+  <rect x="390" y="218" width="300" height="58" rx="10" fill="#f4f7ff" stroke="#d7def0"/>
+  <text x="540" y="242" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f2430">分布式限流</text>
+  <text x="540" y="262" text-anchor="middle" font-size="11" fill="#5a6580">Redis + Lua 令牌桶 · 原子扣减防超卖</text>
+
+  <rect x="710" y="218" width="300" height="58" rx="10" fill="#f4f7ff" stroke="#d7def0"/>
+  <text x="860" y="242" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f2430">SSE 流式管道</text>
+  <text x="860" y="262" text-anchor="middle" font-size="11" fill="#5a6580">StreamingResponse · 事件帧 meta/delta/tool/final</text>
+
+  <!-- Row B -->
+  <rect x="70" y="294" width="600" height="92" rx="10" fill="#fff7f0" stroke="#f0cdb0"/>
+  <text x="370" y="318" text-anchor="middle" font-size="12.5" font-weight="600" fill="#b46a1b">LLM 网关路由 · 三级故障降级链</text>
+  <text x="370" y="338" text-anchor="middle" font-size="11" fill="#7a5b3a">DeepSeek → GLM-4-Flash → Qwen3-8B，主模型失效自动切换备用</text>
+  <text x="370" y="358" text-anchor="middle" font-size="11" fill="#7a5b3a">usage_log 计量：模型归因 · token 用量 · 降级来源 · 延迟</text>
+  <text x="370" y="378" text-anchor="middle" font-size="11" fill="#7a5b3a">注册表模式：新厂商零改动接入（OpenAI 兼容协议适配）</text>
+
+  <rect x="690" y="294" width="320" height="92" rx="10" fill="#f3efff" stroke="#d9c9f5"/>
+  <text x="850" y="318" text-anchor="middle" font-size="12.5" font-weight="600" fill="#6d3fd4">Agent 编排（LangGraph）</text>
+  <text x="850" y="338" text-anchor="middle" font-size="11" fill="#5c4a80">ReAct 循环：思考 → 调用工具 → 观察 → 作答</text>
+  <text x="850" y="358" text-anchor="middle" font-size="11" fill="#5c4a80">工具：计算器 · 实时时间 · 知识库检索</text>
+  <text x="850" y="378" text-anchor="middle" font-size="11" fill="#5c4a80">最大迭代控制 · 异常兜底重试</text>
+
+  <!-- Row C -->
+  <rect x="70" y="404" width="600" height="80" rx="10" fill="#e6f7f1" stroke="#b5e3cf"/>
+  <text x="370" y="428" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0a7a55">RAG 知识库问答</text>
+  <text x="370" y="448" text-anchor="middle" font-size="11" fill="#336650">bge-small-zh 中文向量化 · FAISS 相似度 Top-K 检索</text>
+  <text x="370" y="468" text-anchor="middle" font-size="11" fill="#33664c">回答自动标注文档引用 · 溯源到原文段落</text>
+
+  <rect x="690" y="404" width="320" height="80" rx="10" fill="#f4f7ff" stroke="#d7def0"/>
+  <text x="850" y="428" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f2430">会话管理</text>
+  <text x="850" y="448" text-anchor="middle" font-size="11" fill="#5a6580">多会话 · 多轮上下文 · 消息持久化</text>
+  <text x="850" y="468" text-anchor="middle" font-size="11" fill="#5a6580">独立 SessionLocal 保障流式写事务</text>
+
+  <!-- 箭头：FastAPI → 厂商 -->
+  <line x1="540" y1="502" x2="540" y2="530" stroke="#4d6bfe" stroke-width="2" marker-end="url(#arrB)"/>
+  <text x="556" y="522" font-size="11.5" fill="#5a6580">OpenAI 兼容协议 · httpx 异步调用</text>
+
+  <!-- 厂商行 -->
+  <rect x="130" y="536" width="250" height="64" rx="10" fill="#1e293b"/>
+  <text x="255" y="562" text-anchor="middle" font-size="12.5" font-weight="600" fill="#fff">DeepSeek API</text>
+  <text x="255" y="584" text-anchor="middle" font-size="11" fill="#9fb0cc">deepseek-chat（主力）</text>
+
+  <rect x="415" y="536" width="250" height="64" rx="10" fill="#1e293b"/>
+  <text x="540" y="562" text-anchor="middle" font-size="12.5" font-weight="600" fill="#fff">智谱开放平台</text>
+  <text x="540" y="584" text-anchor="middle" font-size="11" fill="#9fb0cc">GLM-4-Flash（长期免费）</text>
+
+  <rect x="700" y="536" width="250" height="64" rx="10" fill="#1e293b"/>
+  <text x="825" y="562" text-anchor="middle" font-size="12.5" font-weight="600" fill="#fff">硅基流动</text>
+  <text x="825" y="584" text-anchor="middle" font-size="11" fill="#9fb0cc">Qwen3-8B / Qwen2.5-7B / GLM-4-9B</text>
+
+  <!-- 数据层 -->
+  <rect x="50" y="628" width="980" height="118" rx="14" fill="none" stroke="#b9c6e4" stroke-dasharray="6 4"/>
+  <text x="540" y="650" text-anchor="middle" font-size="12" font-weight="700" fill="#5a6580">Docker Compose 编排（mysql / redis / backend 三容器 · restart: unless-stopped）</text>
+
+  <rect x="90" y="668" width="280" height="58" rx="10" fill="#3b82f6"/>
+  <text x="230" y="690" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">MySQL 8</text>
+  <text x="230" y="710" text-anchor="middle" font-size="11" fill="#dbeafe">用户 · 会话 · 消息 · API Key · usage_log</text>
+
+  <rect x="400" y="668" width="280" height="58" rx="10" fill="#dc2626"/>
+  <text x="540" y="690" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Redis 7</text>
+  <text x="540" y="710" text-anchor="middle" font-size="11" fill="#fee2e2">令牌桶限流 · 热点缓存</text>
+
+  <rect x="710" y="668" width="280" height="58" rx="10" fill="#0e9f6e"/>
+  <text x="850" y="690" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">FAISS 索引 + 文档存储</text>
+  <text x="850" y="710" text-anchor="middle" font-size="11" fill="#d1fae5">向量检索 · 上传文档持久卷</text>
+
+  <defs>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4d6bfe"/>
+    </marker>
+  </defs>
+</svg>
